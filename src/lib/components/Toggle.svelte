@@ -19,16 +19,21 @@
 </button>
 
 <style>
-  .switch {
-    width: 42px;
-    height: 22px;
+  /* the switch never steps; its knob slides 16px and stretches 4px while pressed */
+  .switch,
+  .switch:hover,
+  .switch:active {
+    width: 36px;
+    height: 20px;
     padding: 0;
     border-radius: 999px;
     position: relative;
     background: var(--bg);
     flex-shrink: 0;
+    transform: none;
   }
-  .switch.on {
+  .switch.on,
+  .switch.on:hover {
     background: var(--accent);
     border-color: var(--accent);
   }
@@ -36,14 +41,23 @@
     position: absolute;
     top: 2px;
     left: 2px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
     background: var(--text-dim);
-    transition: transform 0.15s;
+    transition:
+      transform 180ms var(--ease),
+      width 90ms var(--ease),
+      background-color 180ms var(--ease);
+  }
+  .switch:active:not(:disabled) .knob {
+    width: 18px;
   }
   .on .knob {
-    transform: translateX(20px);
-    background: white;
+    transform: translateX(16px);
+    background: #fff;
+  }
+  .on:active:not(:disabled) .knob {
+    transform: translateX(12px);
   }
 </style>

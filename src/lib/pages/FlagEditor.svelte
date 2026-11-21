@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Icon from "../components/Icon.svelte";
   import { api, FLAG_NAME_RE } from "../api";
   import Toggle from "../components/Toggle.svelte";
   import { allowlisted, app, markDirty, toast } from "../store.svelte";
@@ -118,11 +119,11 @@
 </script>
 
 <div class="head">
-  <button onclick={back}>← Back</button>
+  <button class="ghost" onclick={back} aria-label="Back to FastFlags"><Icon name="arrow-left" />Back</button>
   <h1 style="margin: 0">FastFlag editor</h1>
   <div style="flex: 1"></div>
-  <button onclick={() => (showImport = !showImport)}>Import JSON</button>
-  <button onclick={exportFlags}>Export</button>
+  <button onclick={() => (showImport = !showImport)}><Icon name="upload" />Import JSON</button>
+  <button onclick={exportFlags}><Icon name="download" />Export</button>
 </div>
 
 {#if showImport}
@@ -137,7 +138,7 @@
   <div style="display: flex; gap: 0.5rem; align-items: center">
     <input type="text" bind:value={newName} placeholder={catalog ? `Add a flag: search ${catalog.length.toLocaleString()} Roblox flags` : "Flag name"} style="flex: 1" onkeydown={(e) => e.key === "Enter" && add()} />
     <input type="text" bind:value={newValue} placeholder="Value" style="width: 140px" onkeydown={(e) => e.key === "Enter" && add()} />
-    <button class="primary" disabled={!nameValid} onclick={() => add()}>Add</button>
+    <button class="primary" disabled={!nameValid} onclick={() => add()}><Icon name="plus" />Add</button>
   </div>
   {#if catalogLoading}<p class="dim" style="margin-top: 0.4rem">Loading the Roblox flag list...</p>{/if}
   {#if catalogError}<p class="dim" style="margin-top: 0.4rem">Couldn't load the Roblox flag list ({catalogError}). You can still type names manually.</p>{/if}
@@ -159,13 +160,17 @@
     <h2>Allowlisted <span class="count">{safe.length}</span></h2>
     <span class="dim" style="font-size: 0.85rem">Roblox applies these. {app.allowlist.flags.length} flags on the list, from {app.allowlist.retrieved}.</span>
     <div style="flex: 1"></div>
-    <button class="small" disabled={refreshing} onclick={refresh}>Refresh list</button>
+    <button class="small" disabled={refreshing} onclick={refresh}><Icon name="refresh-cw" size={14} />Refresh list</button>
     <button class="small" onclick={() => setAll(safe, true)}>All on</button>
     <button class="small" onclick={() => setAll(safe, false)}>All off</button>
   </div>
-  {#each safe as [name, e] (name)}
-    {@render flagRow(name, e)}
-  {/each}
+  {#if safe.length}
+    <div class="list">
+      {#each safe as [name, e] (name)}
+        {@render flagRow(name, e)}
+      {/each}
+    </div>
+  {/if}
   {#if unusedAllowlist.length}
     <details class="card">
       <summary>Add an allowlisted flag ({unusedAllowlist.length} unused)</summary>
@@ -190,9 +195,13 @@
     Roblox ignores flags that aren't on its allowlist, so most of these do nothing. They're only written when <b>Apply non-allowlisted flags</b> is on
     ({app.settings?.ApplyNonAllowlistedFlags ? "currently on" : "currently off"}). Use them at your own risk.
   </div>
-  {#each unsafe as [name, e] (name)}
-    {@render flagRow(name, e)}
-  {/each}
+  {#if unsafe.length}
+    <div class="list">
+      {#each unsafe as [name, e] (name)}
+        {@render flagRow(name, e)}
+      {/each}
+    </div>
+  {/if}
   {#if !unsafe.length}<p class="dim">No non-allowlisted flags configured.</p>{/if}
 </section>
 
@@ -201,7 +210,7 @@
     <Toggle bind:checked={e.Enabled} onchange={markDirty} />
     <input class="mono name" type="text" value={name} onchange={(ev) => rename(name, ev.currentTarget.value)} />
     <input class="mono" type="text" bind:value={e.Value} oninput={markDirty} style="width: 180px" />
-    <button class="small danger" onclick={() => remove(name)} title="Delete">✕</button>
+    <button class="small danger" onclick={() => remove(name)} title="Delete" aria-label={`Delete ${name}`}><Icon name="trash-2" size={14} /></button>
   </div>
 {/snippet}
 
@@ -225,12 +234,26 @@
     color: var(--text-dim);
     font-weight: 400;
   }
+  .list {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
   .flag {
     display: flex;
     gap: 0.6rem;
     align-items: center;
-    padding: 0.35rem 0.6rem;
-    border-bottom: 1px solid var(--border);
+    padding: 0.4rem 0.7rem;
+    border-top: 1px solid var(--border);
+    transition: background-color var(--m-out) var(--ease);
+  }
+  .flag:first-child {
+    border-top: none;
+  }
+  .flag:hover {
+    background: var(--bg-elev-2);
   }
   .flag.off .name {
     opacity: 0.5;
@@ -241,8 +264,11 @@
     background: transparent;
     border-color: transparent;
   }
+  .flag .name:hover {
+    border-color: var(--border-strong);
+  }
   .flag .name:focus {
-    border-color: var(--accent);
+    border-color: var(--focus);
   }
   .suggest {
     display: flex;
@@ -253,16 +279,17 @@
     overflow: auto;
   }
   .suggest button {
-    font-family: "Cascadia Code", Consolas, monospace;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
   }
   .tag {
     margin-left: 0.4rem;
     font-size: 0.7rem;
     padding: 0 0.3rem;
-    border-radius: 4px;
+    border-radius: 999px;
   }
   .tag.safe {
-    background: rgba(52, 211, 153, 0.15);
+    background: rgba(63, 182, 122, 0.14);
     color: var(--ok);
   }
   details summary {

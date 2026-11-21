@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { api } from "./api";
+  import Icon from "./components/Icon.svelte";
   import Logo from "./Logo.svelte";
   import About from "./pages/About.svelte";
   import Behaviour from "./pages/Behaviour.svelte";
@@ -12,12 +13,12 @@
   import { app, loadAll, saveAll, toast } from "./store.svelte";
 
   const PAGES = [
-    { id: "welcome", label: "Home" },
-    { id: "behaviour", label: "Behaviour" },
-    { id: "deployment", label: "Deployment" },
-    { id: "fastflags", label: "FastFlags" },
-    { id: "gbs", label: "Global Settings" },
-    { id: "about", label: "About" },
+    { id: "welcome", label: "Home", icon: "house" },
+    { id: "behaviour", label: "Behaviour", icon: "sliders-horizontal" },
+    { id: "deployment", label: "Deployment", icon: "package" },
+    { id: "fastflags", label: "FastFlags", icon: "flag" },
+    { id: "gbs", label: "Global Settings", icon: "gauge" },
+    { id: "about", label: "About", icon: "info" },
   ] as const;
   type PageId = (typeof PAGES)[number]["id"] | "editor";
 
@@ -56,34 +57,39 @@
 </script>
 
 <div class="shell">
-  <nav>
-    <div class="brand"><Logo size={28} /><span>ztmystrap</span></div>
+  <nav aria-label="Pages">
+    <div class="brand"><Logo size={26} /><span>ztmystrap</span></div>
     {#each PAGES as p}
-      <button class="nav" class:active={page === p.id || (p.id === "fastflags" && page === "editor")} onclick={() => go(p.id)}>{p.label}</button>
+      {@const active = page === p.id || (p.id === "fastflags" && page === "editor")}
+      <button class="nav" class:active aria-current={active ? "page" : undefined} onclick={() => go(p.id)}>
+        <Icon name={p.icon} />{p.label}
+      </button>
     {/each}
-    <div style="flex: 1"></div>
-    <div class="dim ver">v{app.info?.version ?? ""}</div>
+    <div class="grow"></div>
+    <div class="ver mono">v{app.info?.version ?? ""}</div>
   </nav>
 
   <main>
     <div class="content">
-      {#if loadError}
-        <div class="banner warn">Failed to load settings: {loadError}</div>
-      {:else if !app.loaded}
-        <p class="dim">Loading...</p>
-      {:else if page === "welcome"}<Welcome />
-      {:else if page === "behaviour"}<Behaviour />
-      {:else if page === "deployment"}<Deployment />
-      {:else if page === "fastflags"}<FastFlags openEditor={() => go("editor")} />
-      {:else if page === "editor"}<FlagEditor back={() => go("fastflags")} />
-      {:else if page === "gbs"}<GlobalSettings />
-      {:else if page === "about"}<About />{/if}
+      <div class="page">
+        {#if loadError}
+          <div class="banner warn">Failed to load settings: {loadError}</div>
+        {:else if !app.loaded}
+          <p class="dim">Loading...</p>
+        {:else if page === "welcome"}<Welcome />
+        {:else if page === "behaviour"}<Behaviour />
+        {:else if page === "deployment"}<Deployment />
+        {:else if page === "fastflags"}<FastFlags openEditor={() => go("editor")} />
+        {:else if page === "editor"}<FlagEditor back={() => go("fastflags")} />
+        {:else if page === "gbs"}<GlobalSettings />
+        {:else if page === "about"}<About />{/if}
+      </div>
     </div>
 
     <footer>
-      <span class="dim">{app.toast || (app.dirty ? "You have unsaved changes" : "")}</span>
-      <div style="flex: 1"></div>
-      <button disabled={saving || !app.info?.installed} onclick={() => save(true)}>Save and launch Roblox</button>
+      <span class="status" class:dirty={!app.toast && app.dirty}>{app.toast || (app.dirty ? "Unsaved changes" : "All changes saved")}</span>
+      <div class="grow"></div>
+      <button disabled={saving || !app.info?.installed} onclick={() => save(true)}><Icon name="rocket" />Save and launch Roblox</button>
       <button class="primary" disabled={saving || !app.loaded} onclick={() => save()}>Save</button>
     </footer>
   </main>
@@ -94,58 +100,101 @@
     display: flex;
     height: 100vh;
   }
+  .grow {
+    flex: 1;
+  }
   nav {
-    width: 210px;
-    background: var(--bg-elev);
+    width: 216px;
+    flex: none;
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    padding: 1rem 0.6rem;
-    gap: 0.15rem;
+    padding: 1.1rem 0.7rem 0.9rem;
+    gap: 2px;
   }
   .brand {
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    font-weight: 700;
+    font-family: var(--font-display);
+    font-weight: 600;
     font-size: 1.1rem;
-    padding: 0 0.4rem 1rem;
+    letter-spacing: -0.03em;
+    padding: 0 0.5rem 1.3rem;
   }
-  .nav {
-    text-align: left;
+  /* nav items rest bare and take the surface on hover; they never step */
+  .nav,
+  .nav:hover,
+  .nav:active {
+    justify-content: flex-start;
+    gap: 0.65rem;
     border: none;
     background: transparent;
-    padding: 0.55rem 0.8rem;
+    padding: 0.5rem 0.65rem;
+    color: var(--text-dim);
+    position: relative;
+    transform: none;
   }
-  .nav:hover {
-    background: var(--bg-elev-2);
+  .nav:hover:not(.active) {
+    background: var(--bg-elev);
+    color: var(--text);
   }
   .nav.active {
-    background: var(--accent-soft);
-    color: white;
-    box-shadow: inset 3px 0 0 var(--accent);
+    background: var(--bg-elev-2);
+    color: var(--text);
+  }
+  .nav.active::before {
+    content: "";
+    position: absolute;
+    left: -0.7rem;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--accent);
   }
   .ver {
-    padding: 0 0.8rem;
-    font-size: 0.8rem;
+    padding: 0 0.65rem;
+    font-size: 0.75rem;
+    color: var(--text-dim);
   }
   main {
     flex: 1;
     display: flex;
     flex-direction: column;
     min-width: 0;
+    background: var(--bg);
   }
   .content {
     flex: 1;
     overflow-y: auto;
-    padding: 1.5rem 2rem 2rem;
+    padding: 2.2rem 2.4rem 2.4rem;
+  }
+  .page {
+    max-width: 780px;
   }
   footer {
     display: flex;
-    gap: 0.6rem;
+    gap: 0.5rem;
     align-items: center;
-    padding: 0.7rem 1.2rem;
+    padding: 0.7rem 1.2rem 0.7rem 2.4rem;
     border-top: 1px solid var(--border);
-    background: var(--bg-elev);
+  }
+  .status {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+  .status.dirty {
+    color: var(--text);
+  }
+  .status.dirty::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin-right: 0.5rem;
+    vertical-align: 1px;
   }
 </style>
