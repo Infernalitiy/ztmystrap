@@ -1,0 +1,150 @@
+:root {
+  --bg: #0e0f14;
+  --bg-elev: #161821;
+  --bg-elev-2: #1d202b;
+  --border: #2a2e3b;
+  --text: #e8e9ef;
+  --text-dim: #9aa0b4;
+  --accent: #7c5cff;
+  --accent-hover: #6a48f5;
+  --accent-soft: rgba(124, 92, 255, 0.15);
+  --warn: #f5a524;
+  --warn-soft: rgba(245, 165, 36, 0.12);
+  --danger: #f05252;
+  --ok: #34d399;
+  --radius: 10px;
+  font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--bg);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  overflow: hidden;
+  user-select: none;
+}
+h1,
+h2,
+h3 {
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+}
+h1 {
+  font-size: 1.5rem;
+}
+h2 {
+  font-size: 1.05rem;
+  margin-top: 1.5rem;
+}
+p {
+  margin: 0.25rem 0;
+}
+.dim {
+  color: var(--text-dim);
+}
+a {
+  color: var(--accent);
+  cursor: pointer;
+}
+
+button {
+  font: inherit;
+  border: 1px solid var(--border);
+  background: var(--bg-elev-2);
+  color: var(--text);
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+button.primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+button.danger {
+  color: var(--danger);
+}
+button.small {
+  padding: 0.2rem 0.55rem;
+  font-size: 0.85rem;
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  font: inherit;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  user-select: text;
+}
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+textarea {
+  width: 100%;
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 0.85rem;
+}
+
+.card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem;
+  margin-bottom: 0.6rem;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+}
+.row > .label {
+  flex: 1;
+  min-width: 0;
+}
+.row > .label .dim {
+  font-size: 0.85rem;
+}
+.banner {
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+  margin-bottom: 0.8rem;
+  border: 1px solid;
+}
+.banner.warn {
+  background: var(--warn-soft);
+  border-color: var(--warn);
+}
+.banner.info {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+.mono {
+  font-family: "Cascadia Code", Consolas, monospace;
+}

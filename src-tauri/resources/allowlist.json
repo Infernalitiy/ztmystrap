@@ -1,0 +1,96 @@
+{
+  "source": "https://devforum.roblox.com/t/allowlist-for-local-client-configuration-via-fast-flags/3966569",
+  "retrieved": "2026-11-20",
+  "flags": [
+    {
+      "name": "DFIntCSGLevelOfDetailSwitchingDistance",
+      "category": "Geometry",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "DFIntCSGLevelOfDetailSwitchingDistanceL12",
+      "category": "Geometry",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "DFIntCSGLevelOfDetailSwitchingDistanceL23",
+      "category": "Geometry",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "DFIntCSGLevelOfDetailSwitchingDistanceL34",
+      "category": "Geometry",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "FFlagHandleAltEnterFullscreenManually",
+      "category": "Rendering",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "DFFlagTextureQualityOverrideEnabled",
+      "category": "Rendering",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "DFIntTextureQualityOverride",
+      "category": "Rendering",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "FIntDebugForceMSAASamples",
+      "category": "Rendering",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "DFFlagDisableDPIScale",
+      "category": "Rendering",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "FFlagDebugGraphicsPreferD3D11",
+      "category": "Rendering",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "FFlagDebugSkyGray",
+      "category": "Rendering",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "DFFlagDebugPauseVoxelizer",
+      "category": "Rendering",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "DFIntDebugFRMQualityLevelOverride",
+      "category": "Rendering",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "FIntFRMMaxGrassDistance",
+      "category": "Rendering",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "FIntFRMMinGrassDistance",
+      "category": "Rendering",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "FFlagDebugGraphicsPreferVulkan",
+      "category": "Rendering",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "FFlagDebugGraphicsPreferOpenGL",
+      "category": "Rendering",
+      "note": "No value range stated in the post"
+    },
+    {
+      "name": "FIntGrassMovementReducedMotionFactor",
+      "category": "User Interface",
+      "note": "No value range stated in the post"
+    }
+  ]
+}
